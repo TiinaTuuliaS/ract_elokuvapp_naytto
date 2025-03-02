@@ -1,43 +1,42 @@
-import "../css/MovieCard.css"; // Tuodaan komponentin tyylit
-import { useMovieContext } from "../contexts/MovieContext"; // Tuodaan konteksti, joka hallitsee suosikkeja
+import {createContext, useState, useContext, useEffect} from "react"
 
-function MovieCard({ movie }) {
-    // Haetaan kontekstista suosikkien hallintaan liittyvät funktiot
-    const { isFavorite, addToFavorites, removeFromFavorites } = useMovieContext();
-    const favorite = isFavorite(movie.id); // Tarkistetaan, onko elokuva jo suosikeissa
+const MovieContext = createContext()
 
-    // Käsitellään suosikkinapin klikkaus
-    function onFavoriteClick(e) {
-        e.preventDefault();
-        if (favorite) removeFromFavorites(movie.id);
-        else addToFavorites(movie);
+export const useMovieContext = () => useContext(MovieContext)
+
+export const MovieProvider = ({children}) => {
+    const [favorites, setFavorites] = useState([])
+
+    useEffect(() => {
+        const storedFavs = localStorage.getItem("favorites")
+
+        if (storedFavs) setFavorites(JSON.parse(storedFavs))
+    }, [])
+
+    useEffect(() => {
+        localStorage.setItem('favorites', JSON.stringify(favorites))
+    }, [favorites])
+
+    const addToFavorites = (movie) => {
+        setFavorites(prev => [...prev, movie])
     }
 
-    return (
-        <div className="movie-card">
-            {/* Elokuvan juliste */}
-            <div className="movie-poster">
-                <img 
-                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
-                    alt={movie.title} 
-                />
-                <div className="movie-overlay">
-                    {/* Suosikkinappi */}
-                    <button 
-                        className={`favorite-btn ${favorite ? "active" : ""}`} 
-                        onClick={onFavoriteClick}
-                    >
-                        ♥
-                    </button>
-                </div>
-            </div>
-            {/* Elokuvan tiedot */}
-            <div className="movie-info">
-                <h3>{movie.title}</h3>
-                <p>{movie.release_date?.split("-")[0]}</p> {/* Näytetään vain julkaisuvuosi */}
-            </div>
-        </div>
-    );
-}
+    const removeFromFavorites = (movieId) => {
+        setFavorites(prev => prev.filter(movie => movie.id !== movieId))
+    }
+    
+    const isFavorite = (movieId) => {
+        return favorites.some(movie => movie.id === movieId)
+    }
 
-export default MovieCard;
+    const value = {
+        favorites,
+        addToFavorites,
+        removeFromFavorites,
+        isFavorite
+    }
+
+    return <MovieContext.Provider value={value}>
+        {children}
+    </MovieContext.Provider>
+}
