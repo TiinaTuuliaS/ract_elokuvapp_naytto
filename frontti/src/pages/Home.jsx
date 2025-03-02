@@ -1,46 +1,83 @@
-import MovieCard from "../components/MovieCard";
-import {useState} from "react"
-import "../css/Home.css"
+import MovieCard from "../components/MovieCard"; 
+import { useState, useEffect } from "react"; 
+import { searchMovies, getPopularMovies } from "../services/api"; // Tuodaan API-funktiot elokuvien hakuun.
+import "../css/Home.css"; 
+
 
 function Home() {
-    
-    const [searchQuery, setSearchQuery] = useState("");
+  // Tilamuuttujat komponentin hallintaan
+  const [searchQuery, setSearchQuery] = useState(""); // Hakukentän syöte
+  const [movies, setMovies] = useState([]); // Lista elokuvista
+  const [error, setError] = useState(null); // Virheilmoitus, jos haku epäonnistuu
+  const [loading, setLoading] = useState(true); // Lataustila API-kutsujen aikana
 
-
-    const movies = [
-        { id: 1, title: "John Wick", releasedate: "2020" },
-        { id: 2, title: "Teddy 2", releasedate: "2022" },
-        { id: 3, title: "The Muppets", releasedate: "2015" },
-        { id: 4, title: "H Hopomovie", releasedate: "2001" },
-        { id: 5, title: "Snapelo", releasedate: "2000" },
-    ];
-
-    const handleSearch = (e) => {
-        e.preventDefault()
-        alert(searchQuery)
-        setSearchQuery("")
+  // Ladataan suosituimmat elokuvat, kun komponentti renderöityy ensimmäisen kerran
+  useEffect(() => {
+    const loadPopularMovies = async () => {
+      try {
+        const popularMovies = await getPopularMovies(); // Haetaan suosituimmat elokuvat API:sta
+        setMovies(popularMovies); // Asetetaan saadut elokuvat tilaan
+      } catch (err) {
+        console.log(err);
+        setError("Failed to load movies..."); // Näytetään virheilmoitus, jos haku epäonnistuu
+      } finally {
+        setLoading(false); // Poistetaan lataustila riippumatta onnistumisesta tai epäonnistumisesta
+      }
     };
 
-    return (
-        <div className="home">
-            {/* Hakutoiminto elokuville, hakukentän tilan -state- muutokset input kentästä */}
-            <form onSubmit={handleSearch} className="search-form">
-                <input type="text" 
-                placeholder="Hae elokuvia..." 
-                className="search-input" 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <button type="submit" className="search-btn">Hae</button>
-            </form>
+    loadPopularMovies();
+  }, []); // Tyhjä dependency array -> suoritetaan vain kerran komponentin ensimmäisellä renderöinnillä
 
-            <div className="movies-grid">
-                {movies.map((movie) => (
-                    movie.title.toLowerCase().startsWith(searchQuery) && <MovieCard movie={movie} key={movie.id} />
-                ))}
-            </div>
+  // Hakutoiminto, joka suoritetaan, kun käyttäjä painaa hakunappia
+  const handleSearch = async (e) => {
+    e.preventDefault(); // Estetään lomakkeen oletustoiminto (sivun uudelleenlataus)
+    if (!searchQuery.trim()) return; // Jos hakukenttä on tyhjä, ei tehdä mitään
+    if (loading) return; // Jos haku on jo käynnissä, estetään uudelleenhaku
+
+    setLoading(true); // Asetetaan lataustila päälle
+    try {
+        const searchResults = await searchMovies(searchQuery); // Haetaan elokuvat API:sta
+        setMovies(searchResults); // Asetetaan hakutulokset elokuvalistaan
+        setError(null); // Nollataan virheilmoitus, jos haku onnistuu
+    } catch (err) {
+        console.log(err);
+        setError("Failed to search movies..."); // Näytetään virheilmoitus, jos haku epäonnistuu
+    } finally {
+        setLoading(false); // Poistetaan lataustila
+    }
+  };
+
+  return (
+    <div className="home">
+      {/* Hakulomake */}
+      <form onSubmit={handleSearch} className="search-form">
+        <input
+          type="text"
+          placeholder="Search for movies..."
+          className="search-input"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)} // Päivitetään hakukentän arvo tilaan
+        />
+        <button type="submit" className="search-button">
+          Search
+        </button>
+      </form>
+
+      {/* Virheilmoitus, jos haku epäonnistuu */}
+      {error && <div className="error-message">{error}</div>}
+
+      {/* Näytetään joko latausviesti tai elokuvat */}
+      {loading ? (
+        <div className="loading">Loading...</div>
+      ) : (
+        <div className="movies-grid">
+          {movies.map((movie) => (
+            <MovieCard movie={movie} key={movie.id} /> // Näytetään jokainen elokuva korttina
+          ))}
         </div>
-    );
+      )}
+    </div>
+  );
 }
 
 export default Home;
