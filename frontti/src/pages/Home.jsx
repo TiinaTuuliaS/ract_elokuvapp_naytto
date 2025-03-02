@@ -16,10 +16,10 @@ function Home() {
     const loadPopularMovies = async () => {
       try {
         const popularMovies = await getPopularMovies(); // Haetaan suosituimmat elokuvat API:sta
-        setMovies(popularMovies); // Asetetaan saadut elokuvat tilaan
+        setMovies(popularMovies); // Asetetaan saadut suositut belokuvat tilaan
       } catch (err) {
         console.log(err);
-        setError("Failed to load movies..."); // Näytetään virheilmoitus, jos haku epäonnistuu
+        setError("Failed to load movies..."); // Virheilmoitus, jos haku epäonnistuu
       } finally {
         setLoading(false); // Poistetaan lataustila riippumatta onnistumisesta tai epäonnistumisesta
       }
