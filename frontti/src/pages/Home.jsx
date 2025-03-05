@@ -68,7 +68,7 @@ function Home() {
 
       {/* Näytetään joko latausviesti tai elokuvat */}
       {loading ? (
-        <div className="loading">Loading...</div>
+        <div className="loading">Ladataan...</div>
       ) : (
         <div className="movies-grid">
           {movies.map((movie) => (
