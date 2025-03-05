@@ -6,3 +6,17 @@
     display: flex;
     flex-direction: column;
   }
+
+  .movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 4 korttia vierekkäin */
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.movie-card img {
+    width: 100%; /* Skaalaa kuva kortin leveyteen */
+    height: auto;
+    border-radius: 10px;
+}

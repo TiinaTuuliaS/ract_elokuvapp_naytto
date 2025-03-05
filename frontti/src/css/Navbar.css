@@ -1,5 +1,5 @@
 .navbar {
-    background-color: #000000;
+    background-color: #dfdedb;
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
@@ -25,7 +25,7 @@
   }
   
   .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(253, 252, 252, 0.1);
   }
   
   @media (max-width: 768px) {

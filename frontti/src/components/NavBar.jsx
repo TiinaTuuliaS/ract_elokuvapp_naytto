@@ -8,7 +8,7 @@ function NavBar(){
         <Link to ="/">Elokuva appi</Link>
         </div>
         <div className="navbar-links">
-            <Link to="/" className="nav-link">Home</Link>
+            <Link to="/" className="nav-link">Alkuun</Link>
             <Link to="/favorites" className="nav-link">Suosikit</Link>
         </div>
     </nav>

@@ -19,7 +19,7 @@ function Home() {
         setMovies(popularMovies); // Asetetaan saadut suositut belokuvat tilaan
       } catch (err) {
         console.log(err);
-        setError("Failed to load movies..."); // Virheilmoitus, jos haku epäonnistuu
+        setError("Elokuvien lataus ei onnistunut..."); // Virheilmoitus, jos haku epäonnistuu
       } finally {
         setLoading(false); // Poistetaan lataustila riippumatta onnistumisesta tai epäonnistumisesta
       }
