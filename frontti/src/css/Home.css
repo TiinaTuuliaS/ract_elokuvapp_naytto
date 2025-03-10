@@ -20,3 +20,43 @@
     height: auto;
     border-radius: 10px;
 }
+.search-form {
+  display: flex;
+  justify-content: center; /* Keskittää lomakkeen */
+  margin-top: 20px;
+}
+
+.search-input {
+  width: 400px; /* Tupla-arvo verrattuna aiempaan */
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 25px; /* Pyöristetyt reunat */
+  border: 2px solid #ddd; /* Vaalean harmaa reunus */
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.search-input:focus {
+  border: 2px solid #b39d82; /* Keltainen/beige väri, kun kenttä on aktiivinen */
+}
+
+.search-button {
+  padding: 12px 20px;
+  font-size: 18px;
+  background-color: #f1e0c6; /* Vaalea beige tausta */
+  color: #333;
+  border: none;
+  border-radius: 25px; /* Pyöristetyt reunat */
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.search-button:hover {
+  background-color: #d4bfa1; /* Tummentaa nappia hover-tilassa */
+  transform: scale(1.05); /* Pientä kasvua hover-tilassa */
+}
+
+.search-button:focus {
+  outline: none; /* Poistaa oletusfokuksen */
+}

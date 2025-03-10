@@ -41,7 +41,7 @@ function Home() {
         setError(null); // Nollataan virheilmoitus, jos haku onnistuu
     } catch (err) {
         console.log(err);
-        setError("Failed to search movies..."); // Näytetään virheilmoitus, jos haku epäonnistuu
+        setError("Elokuvien lataus ei onnistunut..."); // Näytetään virheilmoitus, jos haku epäonnistuu
     } finally {
         setLoading(false); // Poistetaan lataustila
     }
@@ -59,7 +59,7 @@ function Home() {
           onChange={(e) => setSearchQuery(e.target.value)} // Päivitetään hakukentän arvo tilaan
         />
         <button type="submit" className="search-button">
-          Search
+          Hae!
         </button>
       </form>
 
