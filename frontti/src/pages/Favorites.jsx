@@ -5,7 +5,8 @@ import MovieCard from "../components/MovieCard";
 function Favorites() {
   const { favorites } = useMovieContext();
 
-  if (favorites) {
+  // Tarkistetaan, onko suosikkielokuvia
+  if (favorites.length > 0) {
     return (
       <div className="favorites">
         <h2>Omat suosikkisi</h2>
@@ -18,6 +19,7 @@ function Favorites() {
     );
   }
 
+  // Jos suosikkeja ei ole, näytetään viesti
   return (
     <div className="favorites-empty">
       <h2>Ei vielä suosikkielokuvia!</h2>
